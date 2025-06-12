@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Phonebook</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>📒 Phonebook</h1>
+        <form id="addContactForm" autocomplete="off">
+            <input type="text" id="nameInput" placeholder="Full Name" required>
+            <input type="text" id="phoneInput" placeholder="Phone Number" required>
+            <button type="submit">Add</button>
+        </form>
+        <input type="text" id="searchInput" placeholder="Search by name or number...">
+        <div id="contactsContainer"></div>
+    </div>
+    <script src="js/main.js"></script>
+</body>
+</html>
