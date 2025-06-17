@@ -1,4 +1,9 @@
-const API_URL = 'http://localhost:3000/contacts';
+// Simulated in-memory contacts DB
+let contacts = [
+    { id: 1, name: "Alice Smith", phone: "123-456-7890" },
+    { id: 2, name: "Bob Johnson", phone: "234-567-8901" }
+];
+let nextId = 3;
 
 const addForm = document.getElementById('addContactForm');
 const nameInput = document.getElementById('nameInput');
@@ -6,18 +11,14 @@ const phoneInput = document.getElementById('phoneInput');
 const searchInput = document.getElementById('searchInput');
 const contactsContainer = document.getElementById('contactsContainer');
 
-let contacts = [];
-
-// Fetch all contacts from API
+// Simulate async fetch all contacts
 async function fetchContacts() {
-    try {
-        const res = await fetch(API_URL);
-        if (!res.ok) throw new Error('Failed to fetch');
-        contacts = await res.json();
-        renderContacts();
-    } catch (err) {
-        contactsContainer.innerHTML = `<div style="text-align:center;color:#b00;padding:24px 0;">${err.message}</div>`;
-    }
+    return new Promise(resolve => {
+        setTimeout(() => {
+            renderContacts();
+            resolve();
+        }, 200);
+    });
 }
 
 // Group contacts A-Z
@@ -70,39 +71,29 @@ function renderContacts() {
     });
 }
 
-// Add contact (API)
+// Add contact (Fake API)
 addForm.onsubmit = async function(e) {
     e.preventDefault();
     const name = nameInput.value.trim();
     const phone = phoneInput.value.trim();
     if (!name || !phone) return;
-    try {
-        const res = await fetch(API_URL, {
-            method: 'POST',
-            headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify({ name, phone })
-        });
-        if (!res.ok) throw new Error('Failed to add contact');
-        nameInput.value = "";
-        phoneInput.value = "";
-        await fetchContacts();
-    } catch (err) {
-        alert('Error: ' + err.message);
-    }
+    // Simulate async add
+    await new Promise(resolve => setTimeout(resolve, 200));
+    contacts.push({ id: nextId++, name, phone });
+    nameInput.value = "";
+    phoneInput.value = "";
+    await fetchContacts();
 };
 
-// Delete contact (API)
+// Delete contact (Fake API)
 contactsContainer.onclick = async function(e) {
     if (e.target.classList.contains('delete-btn')) {
-        const id = e.target.dataset.id;
+        const id = Number(e.target.dataset.id);
         if (!confirm('Delete this contact?')) return;
-        try {
-            const res = await fetch(`${API_URL}/${id}`, { method: 'DELETE' });
-            if (!res.ok) throw new Error('Failed to delete');
-            await fetchContacts();
-        } catch (err) {
-            alert('Error: ' + err.message);
-        }
+        // Simulate async delete
+        await new Promise(resolve => setTimeout(resolve, 200));
+        contacts = contacts.filter(c => c.id !== id);
+        await fetchContacts();
     }
 };
 
